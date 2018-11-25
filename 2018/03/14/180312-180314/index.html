@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>180312-180314 | 西二旗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="记录一下今天遇到的几个问题 JNI 调用so lib的native方法,提示JNI function cannot resolve 然而编译后发现，项目运行正常，调研了一番后定位了是IDE的问题，Eclipse和AS都会出现，在开启了NDK support后，APT只能定位到c,cpp代码中的方法，而并不能很好地定位so lib中的方法，导致IDE报红 解决方法，目前已知的就两个，要么无视这个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="180312-180314">
+<meta property="og:url" content="http://www.songyuqiang.com/2018/03/14/180312-180314/index.html">
+<meta property="og:site_name" content="西二旗">
+<meta property="og:description" content="记录一下今天遇到的几个问题 JNI 调用so lib的native方法,提示JNI function cannot resolve 然而编译后发现，项目运行正常，调研了一番后定位了是IDE的问题，Eclipse和AS都会出现，在开启了NDK support后，APT只能定位到c,cpp代码中的方法，而并不能很好地定位so lib中的方法，导致IDE报红 解决方法，目前已知的就两个，要么无视这个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-14T15:53:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="180312-180314">
+<meta name="twitter:description" content="记录一下今天遇到的几个问题 JNI 调用so lib的native方法,提示JNI function cannot resolve 然而编译后发现，项目运行正常，调研了一番后定位了是IDE的问题，Eclipse和AS都会出现，在开启了NDK support后，APT只能定位到c,cpp代码中的方法，而并不能很好地定位so lib中的方法，导致IDE报红 解决方法，目前已知的就两个，要么无视这个">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">西二旗</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://www.songyuqiang.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-180312-180314" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/14/180312-180314/" class="article-date">
+  <time datetime="2018-03-14T15:13:50.000Z" itemprop="datePublished">2018-03-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      180312-180314
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="记录一下今天遇到的几个问题"><a href="#记录一下今天遇到的几个问题" class="headerlink" title="记录一下今天遇到的几个问题"></a>记录一下今天遇到的几个问题</h2><ul>
+<li>JNI 调用so lib的native方法,提示JNI function cannot resolve<ul>
+<li>然而编译后发现，项目运行正常，调研了一番后定位了是IDE的问题，Eclipse和AS都会出现，在开启了NDK support后，<br>APT只能定位到c,cpp代码中的方法，而并不能很好地定位so lib中的方法，导致IDE报红</li>
+<li>解决方法，目前已知的就两个，要么无视这个编译期error，要么关掉ndk support</li>
+</ul>
+</li>
+<li>在做仿微信的可以下拉返回的ImagePreviewer的时候, 下拉的事件和PhotoView的zoom事件冲突<ul>
+<li>解决方法 //todo</li>
+</ul>
+</li>
+<li><p>RecyclerView嵌套的页面,如果Recyclerview能够接收焦点，会在接收到焦点的时候，自动将屏幕滑动到顶部</p>
+<ul>
+<li>解决方法 设置不让RecyclerView接收焦点,这个操作并不会影响它的点击事件</li>
+<li>与此同时，还必须让recyclerView的容器可以接收焦点<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">subRecyclerView.setNestedScrollingEnabled(false);</span><br><span class="line">subRecyclerViewParent.setFocusableInTouchMode(true);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>RecyclerView嵌套的页面,滑动时失去fling效果</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subRecyclerView.setNestedScrollingEnabled(false);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实际上，在项目中，应该避免RecycerView的嵌套，这会导致很多问题,例如焦点，高度固定，sub item无法复用等</p>
+<ul>
+<li>一个比较好的解决方法,是应该划分item type的粒度，使用同一个recyclerView，自定义LayoutManager来实现复杂类型的页面</li>
+<li>这种方法的难点主要在于，增删元素计算position十分繁琐</li>
+<li>为了解决这个问题，仔细学习了一下阿里v-layout的代码</li>
+<li>//todo</li>
+</ul>
+</li>
+<li><p>关于hashCode和equals的实现,</p>
+<ul>
+<li>EffectiveJava中主要提出了两方面的观点</li>
+<li><p>基于里氏替换原则,一个可以被继承的基类的equals和hashCode方法，在子类中也应该是工作正常的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (o == null || getClass() != o.getClass()) &#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>所以上面的代码，如果这个类不是一个final类，那么是不应该出现在equals方法中的，而应该用instanceOf 来代替getClass</p>
+</li>
+<li><p>第二,hashCode和equals应该有一致性，就像FP中函数不应该有副作用，hashCode和equals不应该依赖于一个不可控的变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return getId() != null ? getId().equals(object.getId()) : object.getId() == null;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>所以，上面的代码，如果getId的返回值不可控，那么就不应该出现在equals方法中</p>
+</li>
+<li>但是，有一个反例，在一些ORM框架，例如Hibernate，对象的equals和hashCode，在这个对象没有持久化前，是无法进行比较的</li>
+<li>A business key does not have to be as solid as a database primary key candidate (see Section 13.1.3, “Considering object identity”). Immutable or unique properties are usually good candidates for a business key.</li>
+<li>The most obvious way is to implementequals()/hashCode() by comparing the identifier value of both objects. If the value is the same, both must be the same database row, because they are equal. If both are added to a Set, you will only have one element in the Set). Unfortunately, you cannot use that approach with generated identifiers. Hibernate will only assign identifier values to objects that are persistent; a newly created instance will not have any identifier value. Furthermore, if an instance is unsaved and currently in aSet, saving it will assign an identifier value to the object. If equals() and hashCode() are based on the identifier value, the hash code would change, breaking the contract of the Set. See the Hibernate website for a full discussion of this problem. This is not a Hibernate issue, but normal Java semantics of object identity and equality.<br>It is recommended that you implementequals() and hashCode() using Business key equality. Business key equality means that the equals() method compares only the properties that form the business key. It is a key that would identify our instance in the real world (a natural candidate key):</li>
+<li>我觉得，从工程的角度考虑，Hibernate这样设计是对的，但是适用范围有局限性</li>
+<li>假如我们要在一些对象持久化前，放到一个容器，如ArrayList中，那么如果equals和hashCode不能工作，add,get,indexOf就会全部失效了</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/03/14/180312-180314/" data-id="cjlkxq35o0000jgabj0bzcv8y" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/03/25/leetcode443/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          leetcode443
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/11/lib/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">2018-week-10</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/trush/">trush</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/06/handle_leak/">句柄泄漏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/proxy/">proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/25/leetcode443/">leetcode443</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/14/180312-180314/">180312-180314</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/11/lib/">2018-week-10</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 nameless<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>proxy | 西二旗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="我们的视频缓存，是起了一个本地服务，专门用来做缓存这件事的，比如这个本地服务是127.0.0.1:10000 每次拉缓存的时候，要先ping一下它，连通了，通过这个服务拿缓存数据 然后有的用户反馈，每次看完视频重播，还是走流量 我查了半天发现，假如挂了全局代理的话 那我ping本地的那个127.0.0.1:10000就ping到代理服务器的10000端口上了，那个端口没有这个服务，导致我的缓存就失">
+<meta property="og:type" content="article">
+<meta property="og:title" content="proxy">
+<meta property="og:url" content="http://www.songyuqiang.com/2018/07/10/proxy/index.html">
+<meta property="og:site_name" content="西二旗">
+<meta property="og:description" content="我们的视频缓存，是起了一个本地服务，专门用来做缓存这件事的，比如这个本地服务是127.0.0.1:10000 每次拉缓存的时候，要先ping一下它，连通了，通过这个服务拿缓存数据 然后有的用户反馈，每次看完视频重播，还是走流量 我查了半天发现，假如挂了全局代理的话 那我ping本地的那个127.0.0.1:10000就ping到代理服务器的10000端口上了，那个端口没有这个服务，导致我的缓存就失">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-10T12:57:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="proxy">
+<meta name="twitter:description" content="我们的视频缓存，是起了一个本地服务，专门用来做缓存这件事的，比如这个本地服务是127.0.0.1:10000 每次拉缓存的时候，要先ping一下它，连通了，通过这个服务拿缓存数据 然后有的用户反馈，每次看完视频重播，还是走流量 我查了半天发现，假如挂了全局代理的话 那我ping本地的那个127.0.0.1:10000就ping到代理服务器的10000端口上了，那个端口没有这个服务，导致我的缓存就失">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">西二旗</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://www.songyuqiang.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-proxy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/10/proxy/" class="article-date">
+  <time datetime="2018-07-10T12:54:28.000Z" itemprop="datePublished">2018-07-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      proxy
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们的视频缓存，是起了一个本地服务，专门用来做缓存这件事的，比如这个本地服务是127.0.0.1:10000</p>
+<p>每次拉缓存的时候，要先ping一下它，连通了，通过这个服务拿缓存数据</p>
+<p>然后有的用户反馈，每次看完视频重播，还是走流量</p>
+<p>我查了半天发现，假如挂了全局代理的话</p>
+<p>那我ping本地的那个127.0.0.1:10000就ping到代理服务器的10000端口上了，那个端口没有这个服务，导致我的缓存就失效了</p>
+<p>目前想到的解决办法是,强制这个端口不走代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new OkHttpClient.Builder().proxy(Proxy.NO_PROXY);</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/07/10/proxy/" data-id="cjlkxq3920023jgabbybc6voo" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/06/handle_leak/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          句柄泄漏
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/25/leetcode443/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode443</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/trush/">trush</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/06/handle_leak/">句柄泄漏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/proxy/">proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/25/leetcode443/">leetcode443</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/14/180312-180314/">180312-180314</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/11/lib/">2018-week-10</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 nameless<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>leetcode013 | 西二旗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940package mainimport &amp;quot;fmt&amp;quot;func main() &amp;#123;	fmt.Printf(&amp;quot;%v&amp;quot;, romanToInt(&amp;quot;MDCCCLXXXIV&amp;quot;))&amp;#125;/*相同的数字">
+<meta name="keywords" content="leetcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode013">
+<meta property="og:url" content="http://www.songyuqiang.com/2018/01/18/leetcode013/index.html">
+<meta property="og:site_name" content="西二旗">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940package mainimport &amp;quot;fmt&amp;quot;func main() &amp;#123;	fmt.Printf(&amp;quot;%v&amp;quot;, romanToInt(&amp;quot;MDCCCLXXXIV&amp;quot;))&amp;#125;/*相同的数字">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-18T05:38:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="leetcode013">
+<meta name="twitter:description" content="12345678910111213141516171819202122232425262728293031323334353637383940package mainimport &amp;quot;fmt&amp;quot;func main() &amp;#123;	fmt.Printf(&amp;quot;%v&amp;quot;, romanToInt(&amp;quot;MDCCCLXXXIV&amp;quot;))&amp;#125;/*相同的数字">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">西二旗</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://www.songyuqiang.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode013" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/18/leetcode013/" class="article-date">
+  <time datetime="2018-01-18T05:38:08.000Z" itemprop="datePublished">2018-01-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      leetcode013
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	fmt.Printf(&quot;%v&quot;, romanToInt(&quot;MDCCCLXXXIV&quot;))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">相同的数字连写，所表示的数等于这些数字相加得到的数，例如：III = 3</span><br><span class="line">小的数字在大的数字右边，所表示的数等于这些数字相加得到的数，例如：VIII = 8</span><br><span class="line">小的数字，限于（I、X和C）在大的数字左边，所表示的数等于大数减去小数所得的数，例如：IV = 4</span><br><span class="line">正常使用时，连续的数字重复不得超过三次</span><br><span class="line">从前向后遍历罗马数字，如果某个数比前一个数小，则加上该数。反之，减去前一个数的两倍然后加上该数</span><br><span class="line">*/</span><br><span class="line">func romanToInt(s string) int &#123;</span><br><span class="line">	var dic = make(map[rune]int)</span><br><span class="line">	dic[&apos;I&apos;] = 1</span><br><span class="line">	dic[&apos;V&apos;] = 5</span><br><span class="line">	dic[&apos;X&apos;] = 10</span><br><span class="line">	dic[&apos;L&apos;] = 50</span><br><span class="line">	dic[&apos;C&apos;] = 100</span><br><span class="line">	dic[&apos;D&apos;] = 500</span><br><span class="line">	dic[&apos;M&apos;] = 1000</span><br><span class="line"></span><br><span class="line">	arr := []rune(s)</span><br><span class="line">	var result = dic[arr[0]]</span><br><span class="line">	for i := 1; i &lt; len(arr); i++ &#123;</span><br><span class="line">		cur := dic[arr[i]]</span><br><span class="line">		previous := dic[arr[i-1]]</span><br><span class="line">		if cur &lt;= previous &#123;</span><br><span class="line">			result += cur</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			result -= previous &lt;&lt; 1</span><br><span class="line">			result += cur</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/01/18/leetcode013/" data-id="cjlkxq36x000jjgab571ftzlo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/18/leetcode011/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          leetcode011
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/18/leetcode014/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode014</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/trush/">trush</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/06/handle_leak/">句柄泄漏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/proxy/">proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/25/leetcode443/">leetcode443</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/14/180312-180314/">180312-180314</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/11/lib/">2018-week-10</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 nameless<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

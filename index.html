@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>西二旗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="西二旗">
+<meta property="og:url" content="http://www.songyuqiang.com/index.html">
+<meta property="og:site_name" content="西二旗">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="西二旗">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">西二旗</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://www.songyuqiang.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-handle_leak" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/06/handle_leak/" class="article-date">
+  <time datetime="2018-08-06T12:40:27.000Z" itemprop="datePublished">2018-08-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/06/handle_leak/">句柄泄漏</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">execLsof</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        StringBuilder outputBuilder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        BufferedReader bufferedReader = <span class="keyword">null</span>;</span><br><span class="line">        java.lang.Process process = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> totalLine = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> pid = Process.myPid();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//捕获日志</span></span><br><span class="line">            process = Runtime.getRuntime().exec(<span class="string">"ls -al /proc/"</span> + pid + <span class="string">"/fd"</span>);</span><br><span class="line">            <span class="comment">//将捕获内容转换为BufferedReader</span></span><br><span class="line">            bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(process.getInputStream()));</span><br><span class="line">            String str;</span><br><span class="line">            <span class="keyword">while</span> ((str = bufferedReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                totalLine++;</span><br><span class="line">                outputBuilder.append(str).append(<span class="string">"\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (bufferedReader != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    bufferedReader.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (process != <span class="keyword">null</span>) &#123;</span><br><span class="line">                process.destroy();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> outputBuilder.toString();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/08/06/handle_leak/" data-id="cjlkxq3610002jgab3kocj78o" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-proxy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/10/proxy/" class="article-date">
+  <time datetime="2018-07-10T12:54:28.000Z" itemprop="datePublished">2018-07-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/10/proxy/">proxy</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们的视频缓存，是起了一个本地服务，专门用来做缓存这件事的，比如这个本地服务是127.0.0.1:10000</p>
+<p>每次拉缓存的时候，要先ping一下它，连通了，通过这个服务拿缓存数据</p>
+<p>然后有的用户反馈，每次看完视频重播，还是走流量</p>
+<p>我查了半天发现，假如挂了全局代理的话</p>
+<p>那我ping本地的那个127.0.0.1:10000就ping到代理服务器的10000端口上了，那个端口没有这个服务，导致我的缓存就失效了</p>
+<p>目前想到的解决办法是,强制这个端口不走代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new OkHttpClient.Builder().proxy(Proxy.NO_PROXY);</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/07/10/proxy/" data-id="cjlkxq3920023jgabbybc6voo" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode443" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/25/leetcode443/" class="article-date">
+  <time datetime="2018-03-25T06:32:48.000Z" itemprop="datePublished">2018-03-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/25/leetcode443/">leetcode443</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>上上周面试的时候让手写了一道比较基础的题目，涂涂改改了3遍才勉强通过，场面一度十分尴尬</li>
+<li>回来又在leetcode上找到原题做了下，一遍就ac了，而且居然“runtime beats 100.00 % of golang submissions.”</li>
+<li>看来手写算法这个技能还是需要练习一下，第一是要锻炼临场思考问题的能力，第二就是尽量摆脱对IDE的依赖性</li>
+<li>题目如下，比较基础的字符串压缩<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Given an array of characters, compress it in-place.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">The length after compression must always be smaller than or equal to the original array.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Every element of the array should be a character (not int) of length 1.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">After you are done modifying the input array in-place, return the new length of the array.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Follow up:</span></span><br><span class="line"><span class="comment">Could you solve it using only O(1) extra space?</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Example 1:</span></span><br><span class="line"><span class="comment">Input:</span></span><br><span class="line"><span class="comment">["a","a","b","b","c","c","c"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Output:</span></span><br><span class="line"><span class="comment">Return 6, and the first 6 characters of the input array should be: ["a","2","b","2","c","3"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Explanation:</span></span><br><span class="line"><span class="comment">"aa" is replaced by "a2". "bb" is replaced by "b2". "ccc" is replaced by "c3".</span></span><br><span class="line"><span class="comment">Example 2:</span></span><br><span class="line"><span class="comment">Input:</span></span><br><span class="line"><span class="comment">["a"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Output:</span></span><br><span class="line"><span class="comment">Return 1, and the first 1 characters of the input array should be: ["a"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Explanation:</span></span><br><span class="line"><span class="comment">Nothing is replaced.</span></span><br><span class="line"><span class="comment">Example 3:</span></span><br><span class="line"><span class="comment">Input:</span></span><br><span class="line"><span class="comment">["a","b","b","b","b","b","b","b","b","b","b","b","b"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Output:</span></span><br><span class="line"><span class="comment">Return 4, and the first 4 characters of the input array should be: ["a","b","1","2"].</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Explanation:</span></span><br><span class="line"><span class="comment">Since the character "a" does not repeat, it is not compressed. "bbbbbbbbbbbb" is replaced by "b12".</span></span><br><span class="line"><span class="comment">Notice each digit has it's own entry in the array.</span></span><br><span class="line"><span class="comment">Note:</span></span><br><span class="line"><span class="comment">All characters have an ASCII value in [35, 126].</span></span><br><span class="line"><span class="comment">1 &lt;= len(chars) &lt;= 1000. */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">compress</span><span class="params">(chars []<span class="keyword">byte</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> chars == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(chars) == <span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> cur, count, arrCur <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">for</span> cur &lt; <span class="built_in">len</span>(chars) &#123;</span><br><span class="line">		<span class="keyword">if</span> cur+<span class="number">1</span> &lt; <span class="built_in">len</span>(chars) &amp;&amp; chars[cur] == chars[cur+<span class="number">1</span>] &#123;</span><br><span class="line">			count++</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			count++</span><br><span class="line">			<span class="keyword">if</span> count == <span class="number">1</span> &#123;</span><br><span class="line">				chars[arrCur] = chars[cur]</span><br><span class="line">				arrCur++</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				chars[arrCur] = chars[cur]</span><br><span class="line">				countStr := []<span class="keyword">byte</span>(fmt.Sprintf(<span class="string">"%v"</span>, count))</span><br><span class="line">				<span class="keyword">for</span> i := <span class="built_in">len</span>(countStr); i &gt; <span class="number">0</span>; i-- &#123;</span><br><span class="line">					<span class="comment">//fmt.Printf("%v %v", len(countStr), i)</span></span><br><span class="line">					chars[arrCur+i] = countStr[i<span class="number">-1</span>]</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//fmt.Printf("%v", arrCur)</span></span><br><span class="line">				arrCur += <span class="built_in">len</span>(countStr) + <span class="number">1</span></span><br><span class="line">			&#125;</span><br><span class="line">			count = <span class="number">0</span></span><br><span class="line">		&#125;</span><br><span class="line">		cur++</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> arrCur</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr := []<span class="keyword">byte</span>(<span class="string">"abbbbbccc"</span>)</span><br><span class="line">	index := compress(arr[<span class="number">0</span>:])</span><br><span class="line">	<span class="keyword">for</span> _, v := <span class="keyword">range</span> arr[<span class="number">0</span>:index] &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"%v"</span>, <span class="keyword">string</span>(v))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/03/25/leetcode443/" data-id="cjlkxq38o001tjgaboxaxmz3y" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-180312-180314" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/14/180312-180314/" class="article-date">
+  <time datetime="2018-03-14T15:13:50.000Z" itemprop="datePublished">2018-03-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/14/180312-180314/">180312-180314</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="记录一下今天遇到的几个问题"><a href="#记录一下今天遇到的几个问题" class="headerlink" title="记录一下今天遇到的几个问题"></a>记录一下今天遇到的几个问题</h2><ul>
+<li>JNI 调用so lib的native方法,提示JNI function cannot resolve<ul>
+<li>然而编译后发现，项目运行正常，调研了一番后定位了是IDE的问题，Eclipse和AS都会出现，在开启了NDK support后，<br>APT只能定位到c,cpp代码中的方法，而并不能很好地定位so lib中的方法，导致IDE报红</li>
+<li>解决方法，目前已知的就两个，要么无视这个编译期error，要么关掉ndk support</li>
+</ul>
+</li>
+<li>在做仿微信的可以下拉返回的ImagePreviewer的时候, 下拉的事件和PhotoView的zoom事件冲突<ul>
+<li>解决方法 //todo</li>
+</ul>
+</li>
+<li><p>RecyclerView嵌套的页面,如果Recyclerview能够接收焦点，会在接收到焦点的时候，自动将屏幕滑动到顶部</p>
+<ul>
+<li>解决方法 设置不让RecyclerView接收焦点,这个操作并不会影响它的点击事件</li>
+<li>与此同时，还必须让recyclerView的容器可以接收焦点<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">subRecyclerView.setNestedScrollingEnabled(false);</span><br><span class="line">subRecyclerViewParent.setFocusableInTouchMode(true);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>RecyclerView嵌套的页面,滑动时失去fling效果</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subRecyclerView.setNestedScrollingEnabled(false);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实际上，在项目中，应该避免RecycerView的嵌套，这会导致很多问题,例如焦点，高度固定，sub item无法复用等</p>
+<ul>
+<li>一个比较好的解决方法,是应该划分item type的粒度，使用同一个recyclerView，自定义LayoutManager来实现复杂类型的页面</li>
+<li>这种方法的难点主要在于，增删元素计算position十分繁琐</li>
+<li>为了解决这个问题，仔细学习了一下阿里v-layout的代码</li>
+<li>//todo</li>
+</ul>
+</li>
+<li><p>关于hashCode和equals的实现,</p>
+<ul>
+<li>EffectiveJava中主要提出了两方面的观点</li>
+<li><p>基于里氏替换原则,一个可以被继承的基类的equals和hashCode方法，在子类中也应该是工作正常的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (o == null || getClass() != o.getClass()) &#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>所以上面的代码，如果这个类不是一个final类，那么是不应该出现在equals方法中的，而应该用instanceOf 来代替getClass</p>
+</li>
+<li><p>第二,hashCode和equals应该有一致性，就像FP中函数不应该有副作用，hashCode和equals不应该依赖于一个不可控的变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return getId() != null ? getId().equals(object.getId()) : object.getId() == null;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>所以，上面的代码，如果getId的返回值不可控，那么就不应该出现在equals方法中</p>
+</li>
+<li>但是，有一个反例，在一些ORM框架，例如Hibernate，对象的equals和hashCode，在这个对象没有持久化前，是无法进行比较的</li>
+<li>A business key does not have to be as solid as a database primary key candidate (see Section 13.1.3, “Considering object identity”). Immutable or unique properties are usually good candidates for a business key.</li>
+<li>The most obvious way is to implementequals()/hashCode() by comparing the identifier value of both objects. If the value is the same, both must be the same database row, because they are equal. If both are added to a Set, you will only have one element in the Set). Unfortunately, you cannot use that approach with generated identifiers. Hibernate will only assign identifier values to objects that are persistent; a newly created instance will not have any identifier value. Furthermore, if an instance is unsaved and currently in aSet, saving it will assign an identifier value to the object. If equals() and hashCode() are based on the identifier value, the hash code would change, breaking the contract of the Set. See the Hibernate website for a full discussion of this problem. This is not a Hibernate issue, but normal Java semantics of object identity and equality.<br>It is recommended that you implementequals() and hashCode() using Business key equality. Business key equality means that the equals() method compares only the properties that form the business key. It is a key that would identify our instance in the real world (a natural candidate key):</li>
+<li>我觉得，从工程的角度考虑，Hibernate这样设计是对的，但是适用范围有局限性</li>
+<li>假如我们要在一些对象持久化前，放到一个容器，如ArrayList中，那么如果equals和hashCode不能工作，add,get,indexOf就会全部失效了</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/03/14/180312-180314/" data-id="cjlkxq35o0000jgabj0bzcv8y" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-lib" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/11/lib/" class="article-date">
+  <time datetime="2018-03-11T15:04:21.000Z" itemprop="datePublished">2018-03-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/11/lib/">2018-week-10</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="记录一下周末学习的碎片知识点，温故知新"><a href="#记录一下周末学习的碎片知识点，温故知新" class="headerlink" title="记录一下周末学习的碎片知识点，温故知新"></a>记录一下周末学习的碎片知识点，温故知新</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/21359984" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/21359984</a><ul>
+<li>为了减小 apk 体积，只保留 armeabi 和 armeabi-v7a 两个文件夹，并保证这两个文件夹中 .so 数量一致<br>对只提供 armeabi 版本的第三方 .so，原样复制一份到 armeabi-v7a 文件夹</li>
+</ul>
+</li>
+<li><p>canvas双缓冲</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bufferBitmap = Bitmap.createBitmap(this.screenSize.x, this.screenSize.y, Bitmap.Config.ARGB_8888);//1</span><br><span class="line">        bufferCanvas = new Canvas(bufferBitmap);//2</span><br><span class="line">        canvas.drawBitmap(bufferBitmap, 0, 0, new Paint());//3</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1 创建内存位图</li>
+<li>2 创建绘图画布</li>
+<li>3 在双缓冲中绘图，将自定义缓冲绘制到屏幕上</li>
+<li><p>经过测试，绘制操作较少的时候，不使用缓冲效率较高，反之，canvas双缓冲可以大幅提高渲染速度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private void drawOnBuffer(Canvas canvas) &#123;</span><br><span class="line">        Paint paint = new Paint();</span><br><span class="line">        paint.setAntiAlias(true);</span><br><span class="line">        canvas.drawColor(Color.WHITE);</span><br><span class="line">        for (int n = 0; n &lt; 500; n++) &#123;                     </span><br><span class="line">            //随机在绘图画布上绘制500个圆</span><br><span class="line">            int r = rand.nextInt(256);</span><br><span class="line">            int g = rand.nextInt(256);</span><br><span class="line">            int b = rand.nextInt(256);</span><br><span class="line">            paint.setColor(Color.rgb(r, g, b));</span><br><span class="line">            int x = rand.nextInt(canvas.getWidth());</span><br><span class="line">            int y = rand.nextInt(canvas.getHeight());</span><br><span class="line">            int radius = rand.nextInt(100) + 20;</span><br><span class="line">            canvas.drawCircle(x, y, radius, paint);</span><br><span class="line">            Log.d(&quot;Circle&quot;, &quot;第n个&quot; + n);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在上面这个例子中，临界点大概在一次绘制500个圆</p>
+</li>
+</ul>
+</li>
+<li><p>最近被问了很多次保活，为了加深认识，做了这几个方面的调研</p>
+<ul>
+<li>问了一个在这方面做的比较多的朋友，现在还没堵上的大概有这么几个<ul>
+<li>针对不同api version，做不同的适配</li>
+<li>JobService</li>
+<li>相同id Service</li>
+<li>daemon</li>
+<li>接一些应用市场，如google play的receiver</li>
+</ul>
+</li>
+<li>decompile了几个国内比较大的应用，找到了一些相关代码片段<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">if (VERSION.SDK_INT &gt;= 21) &#123;</span><br><span class="line">    ((JobScheduler) a.a.getSystemService(&quot;jobscheduler).cancel(2);&#125; </span><br><span class="line">else &#123;</span><br><span class="line">    AlarmManager alarmManager = (AlarmManager) a.a.getSystemService(NotificationCompatApi24.CATEGORY_ALARM);</span><br><span class="line">    if (b != null) &#123;</span><br><span class="line">                alarmManager.cancel(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public void onReceive(Context context, Intent intent) &#123;</span><br><span class="line">    if (intent != null &amp;&amp; &quot;com.xxx.packagename&quot;.equals(intent.getAction())) &#123;</span><br><span class="line">        WatchDogService.a();</span><br><span class="line">    &#125; else if (a.c) &#123;</span><br><span class="line">        a.a(a.b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>关于保证客户端私钥安全，首先，这是一个伪命题，私钥存在客户端，无论如何都不安全</p>
+<ul>
+<li>一个稍微靠谱的方式，将私钥写在native lib里，通过jni调用获取<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">static &#123;</span><br><span class="line">    System.loadLibrary(&quot;private_config&quot;);</span><br><span class="line">    native_init();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static String a(String str, JSONObject jSONObject) &#123;</span><br><span class="line">    return a(str, jSONObject.toString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static String a(String str, String str2) &#123;</span><br><span class="line">    String generateSign = generateSign(str2.getBytes());</span><br><span class="line">    if (str.contains(&quot;?&quot;)) &#123;</span><br><span class="line">        generateSign = &quot;&amp;sign=&quot; + generateSign;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        generateSign = &quot;?sign=&quot; + generateSign;</span><br><span class="line">    &#125;</span><br><span class="line">    return str + generateSign;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/03/11/lib/" data-id="cjlkxq38r001vjgabszpq4x74" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-multipart" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/25/multipart/" class="article-date">
+  <time datetime="2018-02-24T17:02:43.000Z" itemprop="datePublished">2018-02-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/25/multipart/">multipart</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>相比于Python,Ruby,使用Go编写的脚本直接生成可执行的二进制文件,可以直接在os上运行</li>
+<li>于是尝试用Go写了一个 Android apk 打包上传fir.im的脚本,这样在团队中使用,可以不需要配脚本的编译运行环境,即插即用</li>
+<li>首先,运行二进制的 gradlew 打包一个 apk</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(&quot;./gradlew&quot;,&quot;assembleDebug&quot;)</span><br><span class="line">cmd.Stdout = os.Stdout</span><br><span class="line">cmd.Stderr = os.Stderr</span><br><span class="line">if err := cmd.Run(); err != nil &#123;</span><br><span class="line">	log.Fatalf(&quot;Error building Android app: %v&quot;,err)</span><br><span class="line">	return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第二步,用 fir.im 的第三方服务发起一个HTTP GET request,生成七牛的token</li>
+<li><p>在解析返回的json时遇到了一些阻碍<br>一开始没有找到类似 Java  中JsonObject optString的方法,使用Go,每解析一层都需要转成一个字典,导致代码十分繁琐</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var model map[string]string</span><br><span class="line">err = json.Unmarshal([]byte(*str), &amp;model)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>于是采用了第二种方法,先根据json生成一个model,之后将返回的string映射到这个model上,这种方法明显方便了很多</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">config := make(map[string]interface&#123;&#125;)</span><br><span class="line">config[&quot;type&quot;] = &quot;android&quot;</span><br><span class="line">config[&quot;bundle_id&quot;] = &quot;xxx&quot;</span><br><span class="line">config[&quot;api_token&quot;] = &quot;yyy&quot;</span><br><span class="line">bytesData, err := json.Marshal(config)</span><br><span class="line">reader := bytes.NewReader(bytesData)</span><br><span class="line">resp, err := http.Post(&quot;http://api.fir.im/apps&quot;,&quot;application/json&quot;, reader)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>最后一步,使用form/data上传文件</li>
+<li>这里学到一个知识,multipart表单上传多个 field 时,是将所有内容作为一个字符串写入到body中,结合 http/boundary 来分割不同part的内容</li>
+<li>也就是说,正确的做法,应该是要先遍历所有 field 中的内容,生成出与这些内容没有发生交集的字符串,来作为分隔符</li>
+<li><p>而不能简单的用如\r\n这样的方式来分隔,因为要上传的field中可能就包含了\r\n，导致分割的part不是我们想要的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//go 标准库中生成boundary的方法</span><br><span class="line">    func randomBoundary() string &#123;</span><br><span class="line">	var buf [30]byte</span><br><span class="line">	_, err := io.ReadFull(rand.Reader, buf[:])</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		panic(err)</span><br><span class="line">	&#125;</span><br><span class="line">	return fmt.Sprintf(&quot;%x&quot;, buf[:])</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TODO : gradle 整合 go 二进制脚本 </p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/02/25/multipart/" data-id="cjlkxq38t001xjgabsd17ptgu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-objective" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/20/objective/" class="article-date">
+  <time datetime="2018-02-20T13:28:43.000Z" itemprop="datePublished">2018-02-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/20/objective/">objective</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>后天又要上班了…</li>
+<li>VSC真好用</li>
+<li>果然定了很多计划最后啥都没干</li>
+<li>leetcode078 subsets 怎么做都不会…</li>
+<li>新的一年我只有一个目标 ==&gt; 早起</li>
+<li>持续集成真好用…</li>
+<li>还是需要一个好的显示器…</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/02/20/objective/" data-id="cjlkxq3900022jgabzpvx1dgd" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/trush/">trush</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode050" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/18/leetcode050/" class="article-date">
+  <time datetime="2018-01-18T05:38:08.000Z" itemprop="datePublished">2018-01-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/18/leetcode050/">leetcode050</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	fmt.Printf(&quot;%v&quot;, myPow(2, -2))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func myPow(x float64, n int) float64 &#123;</span><br><span class="line">	if n == 0 &#123;</span><br><span class="line">		return 1.0</span><br><span class="line">	&#125;</span><br><span class="line">	half := myPow(x, n/2)</span><br><span class="line"></span><br><span class="line">	if n%2 == 0 &#123;</span><br><span class="line">		return half * half</span><br><span class="line">	&#125; else if n &gt; 0 &#123;</span><br><span class="line">		return half * half * x</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		return half / x * half</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/01/18/leetcode050/" data-id="cjlkxq37p0013jgabh2u6pssh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode008" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/18/leetcode008/" class="article-date">
+  <time datetime="2018-01-18T05:38:08.000Z" itemprop="datePublished">2018-01-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/18/leetcode008/">leetcode008</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func myAtoi(str string) int &#123;</span><br><span class="line">	if str == &quot;&quot; &#123;</span><br><span class="line">		return 0</span><br><span class="line">	&#125;</span><br><span class="line">	bytes := []byte(str)</span><br><span class="line">	var res int64 = 0</span><br><span class="line">	carry := 1</span><br><span class="line"></span><br><span class="line">	positive := true</span><br><span class="line">	start := true</span><br><span class="line">	startindex := 0</span><br><span class="line">	for i, v := range bytes &#123;</span><br><span class="line">		if !start &amp;&amp; v == 32 &#123;</span><br><span class="line">			return 0</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		if start &#123;</span><br><span class="line">			if v==32 &#123;</span><br><span class="line">				continue</span><br><span class="line">			&#125;</span><br><span class="line">			if v == &apos;-&apos; &#123;</span><br><span class="line">				positive = false</span><br><span class="line">			&#125; else if v &gt; 48 &amp;&amp; v &lt;= 57 &#123;</span><br><span class="line">				startindex = i</span><br><span class="line">				break</span><br><span class="line">			&#125;else if v!=&apos;+&apos;&amp;&amp;v&lt;48||v&gt;57&#123;</span><br><span class="line">				return 0</span><br><span class="line">			&#125;</span><br><span class="line">			start = false</span><br><span class="line">		&#125; else if !start &#123;</span><br><span class="line">			fmt.Printf(&quot;begin %v&quot;, v)</span><br><span class="line">			if v == 48 &#123;</span><br><span class="line"></span><br><span class="line">				continue</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			if v &gt; 48 &amp;&amp; v &lt;= 57 &#123;</span><br><span class="line">				if i+1 &lt; len(bytes) &amp;&amp; bytes[i+1] == 32 &#123;</span><br><span class="line">					return 0</span><br><span class="line">				&#125; else &#123;</span><br><span class="line">					startindex = i</span><br><span class="line">					break</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				return 0</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	//fmt.Printf(&quot;start %v %v \n&quot;,startindex,bytes[startindex+1])</span><br><span class="line">	for i := len(bytes) - 1; i &gt;= startindex; i-- &#123;</span><br><span class="line"></span><br><span class="line">		v := bytes[i]</span><br><span class="line"></span><br><span class="line">		if v &gt;= 48 &amp;&amp; v &lt;= 57 &#123;</span><br><span class="line">			var num int</span><br><span class="line">			if positive &#123;</span><br><span class="line">				num = int(v - 48)</span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				num = -(int(v - 48))</span><br><span class="line">			&#125;</span><br><span class="line">			res += int64(num * carry)</span><br><span class="line"></span><br><span class="line">			if res &gt; 2147483647 &#123;</span><br><span class="line">				return 2147483647</span><br><span class="line">			&#125;</span><br><span class="line">			if res &lt; -2147483648 &#123;</span><br><span class="line">				return -2147483648</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			carry *= 10</span><br><span class="line"></span><br><span class="line">		&#125; else if v == 32 &#123;</span><br><span class="line">			res = 0</span><br><span class="line"></span><br><span class="line">			carry = 1</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			res = 0</span><br><span class="line"></span><br><span class="line">			carry = 1</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return int(res)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line"></span><br><span class="line">	print(myAtoi(&quot;9223372036854775809&quot;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/01/18/leetcode008/" data-id="cjlkxq36r000djgabhmxosvsz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode009" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/18/leetcode009/" class="article-date">
+  <time datetime="2018-01-18T05:38:08.000Z" itemprop="datePublished">2018-01-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/18/leetcode009/">leetcode009</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">func isPalindrome(x int) bool &#123;</span><br><span class="line">	//carry := 1</span><br><span class="line">	//var arr []int</span><br><span class="line">	if x &lt; 0 &#123;</span><br><span class="line">		return false</span><br><span class="line">	&#125;</span><br><span class="line">	lens := 1</span><br><span class="line">	for x/(lens*10) != 0 &#123;</span><br><span class="line">		lens *= 10</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	left := 1</span><br><span class="line">	right := lens</span><br><span class="line">	for left &lt; right &#123;</span><br><span class="line">		//fmt.Printf(&quot;%v %v \n&quot;, (x / left), (x / lens))</span><br><span class="line">		if x/left%10 != x/right%10 &#123;</span><br><span class="line">			return false</span><br><span class="line">		&#125;</span><br><span class="line">		left *= 10</span><br><span class="line">		right /= 10</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	/*for x/carry != 0 &#123;</span><br><span class="line">		arr = append(arr, x/carry%10)</span><br><span class="line"></span><br><span class="line">		carry *= 10</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	i := 0</span><br><span class="line">	j := len(arr) - 1</span><br><span class="line"></span><br><span class="line">	for i &lt; len(arr)-1 &amp;&amp; j &gt;= 0 &#123;</span><br><span class="line">		//fmt.Printf(&quot;%v  %v \n&quot;, arr[i], arr[j])</span><br><span class="line">		if arr[i] != arr[j] &#123;</span><br><span class="line">			return false</span><br><span class="line">		&#125;</span><br><span class="line">		i++</span><br><span class="line">		j--</span><br><span class="line">	&#125;*/</span><br><span class="line"></span><br><span class="line">	return true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/01/18/leetcode009/" data-id="cjlkxq36t000fjgab3xny9bhk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/trush/">trush</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/06/handle_leak/">句柄泄漏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/proxy/">proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/25/leetcode443/">leetcode443</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/14/180312-180314/">180312-180314</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/11/lib/">2018-week-10</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 nameless<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

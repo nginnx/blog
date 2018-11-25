@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>西二旗</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://www.songyuqiang.com/"/>
+  <updated>2018-09-02T14:18:33.000Z</updated>
+  <id>http://www.songyuqiang.com/</id>
+  
+  <author>
+    <name>nameless</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>句柄泄漏</title>
+    <link href="http://www.songyuqiang.com/2018/08/06/handle_leak/"/>
+    <id>http://www.songyuqiang.com/2018/08/06/handle_leak/</id>
+    <published>2018-08-06T12:40:27.000Z</published>
+    <updated>2018-09-02T14:18:33.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">execLsof</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        StringBuilder outputBuilder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        BufferedReader bufferedReader = <span class="keyword">null</span>;</span><br><span class="line">        java.lang.Process process = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> totalLine = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> pid = Process.myPid();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//捕获日志</span></span><br><span class="line">            process = Runtime.getRuntime().exec(<span class="string">"ls -al /proc/"</span> + pid + <span class="string">"/fd"</span>);</span><br><span class="line">            <span class="comment">//将捕获内容转换为BufferedReader</span></span><br><span class="line">            bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(process.getInputStream()));</span><br><span class="line">            String str;</span><br><span class="line">            <span class="keyword">while</span> ((str = bufferedReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                totalLine++;</span><br><span class="line">                outputBuilder.append(str).append(<span class="string">"\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (bufferedReader != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    bufferedReader.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (process != <span class="keyword">null</span>) &#123;</span><br><span class="line">                process.destroy();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> outputBuilder.toString();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>proxy</title>
+    <link href="http://www.songyuqiang.com/2018/07/10/proxy/"/>
+    <id>http://www.songyuqiang.com/2018/07/10/proxy/</id>
+    <published>2018-07-10T12:54:28.000Z</published>
+    <updated>2018-07-10T12:57:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>我们的视频缓存，是起了一个本地服务，专门用来做缓存这件事的，比如这个本地服务是127.0.0.1:10000</p><p>每次拉缓存的时候，要先ping一下它，连通了，通过这个服务拿缓存数据</p><p>然后有的用户反馈，每次看完视频重播，还是走流量</p><p>我查了半天发现，假如挂了全局代理的话</p><p>那我ping本地的那个127.0.0.1:10000就ping到代理服务器的10000端口上了，那个端口没有这个服务，导致我的缓存就失效了</p><p>目前想到的解决办法是,强制这个端口不走代理</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new OkHttpClient.Builder().proxy(Proxy.NO_PROXY);</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;我们的视频缓存，是起了一个本地服务，专门用来做缓存这件事的，比如这个本地服务是127.0.0.1:10000&lt;/p&gt;
+&lt;p&gt;每次拉缓存的时候，要先ping一下它，连通了，通过这个服务拿缓存数据&lt;/p&gt;
+&lt;p&gt;然后有的用户反馈，每次看完视频重播，还是走流量&lt;/p&gt;
+&lt;p&gt;我查
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode443</title>
+    <link href="http://www.songyuqiang.com/2018/03/25/leetcode443/"/>
+    <id>http://www.songyuqiang.com/2018/03/25/leetcode443/</id>
+    <published>2018-03-25T06:32:48.000Z</published>
+    <updated>2018-09-02T14:22:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>上上周面试的时候让手写了一道比较基础的题目，涂涂改改了3遍才勉强通过，场面一度十分尴尬</li><li>回来又在leetcode上找到原题做了下，一遍就ac了，而且居然“runtime beats 100.00 % of golang submissions.”</li><li>看来手写算法这个技能还是需要练习一下，第一是要锻炼临场思考问题的能力，第二就是尽量摆脱对IDE的依赖性</li><li>题目如下，比较基础的字符串压缩<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"><span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Given an array of characters, compress it in-place.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">The length after compression must always be smaller than or equal to the original array.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Every element of the array should be a character (not int) of length 1.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">After you are done modifying the input array in-place, return the new length of the array.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Follow up:</span></span><br><span class="line"><span class="comment">Could you solve it using only O(1) extra space?</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Example 1:</span></span><br><span class="line"><span class="comment">Input:</span></span><br><span class="line"><span class="comment">["a","a","b","b","c","c","c"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Output:</span></span><br><span class="line"><span class="comment">Return 6, and the first 6 characters of the input array should be: ["a","2","b","2","c","3"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Explanation:</span></span><br><span class="line"><span class="comment">"aa" is replaced by "a2". "bb" is replaced by "b2". "ccc" is replaced by "c3".</span></span><br><span class="line"><span class="comment">Example 2:</span></span><br><span class="line"><span class="comment">Input:</span></span><br><span class="line"><span class="comment">["a"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Output:</span></span><br><span class="line"><span class="comment">Return 1, and the first 1 characters of the input array should be: ["a"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Explanation:</span></span><br><span class="line"><span class="comment">Nothing is replaced.</span></span><br><span class="line"><span class="comment">Example 3:</span></span><br><span class="line"><span class="comment">Input:</span></span><br><span class="line"><span class="comment">["a","b","b","b","b","b","b","b","b","b","b","b","b"]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Output:</span></span><br><span class="line"><span class="comment">Return 4, and the first 4 characters of the input array should be: ["a","b","1","2"].</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Explanation:</span></span><br><span class="line"><span class="comment">Since the character "a" does not repeat, it is not compressed. "bbbbbbbbbbbb" is replaced by "b12".</span></span><br><span class="line"><span class="comment">Notice each digit has it's own entry in the array.</span></span><br><span class="line"><span class="comment">Note:</span></span><br><span class="line"><span class="comment">All characters have an ASCII value in [35, 126].</span></span><br><span class="line"><span class="comment">1 &lt;= len(chars) &lt;= 1000. */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">compress</span><span class="params">(chars []<span class="keyword">byte</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line"><span class="keyword">if</span> chars == <span class="literal">nil</span> &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(chars) == <span class="number">1</span> &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> cur, count, arrCur <span class="keyword">int</span></span><br><span class="line"><span class="keyword">for</span> cur &lt; <span class="built_in">len</span>(chars) &#123;</span><br><span class="line"><span class="keyword">if</span> cur+<span class="number">1</span> &lt; <span class="built_in">len</span>(chars) &amp;&amp; chars[cur] == chars[cur+<span class="number">1</span>] &#123;</span><br><span class="line">count++</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">count++</span><br><span class="line"><span class="keyword">if</span> count == <span class="number">1</span> &#123;</span><br><span class="line">chars[arrCur] = chars[cur]</span><br><span class="line">arrCur++</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">chars[arrCur] = chars[cur]</span><br><span class="line">countStr := []<span class="keyword">byte</span>(fmt.Sprintf(<span class="string">"%v"</span>, count))</span><br><span class="line"><span class="keyword">for</span> i := <span class="built_in">len</span>(countStr); i &gt; <span class="number">0</span>; i-- &#123;</span><br><span class="line"><span class="comment">//fmt.Printf("%v %v", len(countStr), i)</span></span><br><span class="line">chars[arrCur+i] = countStr[i<span class="number">-1</span>]</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//fmt.Printf("%v", arrCur)</span></span><br><span class="line">arrCur += <span class="built_in">len</span>(countStr) + <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line">cur++</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> arrCur</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">arr := []<span class="keyword">byte</span>(<span class="string">"abbbbbccc"</span>)</span><br><span class="line">index := compress(arr[<span class="number">0</span>:])</span><br><span class="line"><span class="keyword">for</span> _, v := <span class="keyword">range</span> arr[<span class="number">0</span>:index] &#123;</span><br><span class="line">fmt.Printf(<span class="string">"%v"</span>, <span class="keyword">string</span>(v))</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;上上周面试的时候让手写了一道比较基础的题目，涂涂改改了3遍才勉强通过，场面一度十分尴尬&lt;/li&gt;
+&lt;li&gt;回来又在leetcode上找到原题做了下，一遍就ac了，而且居然“runtime beats 100.00 % of golang submissions.
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>180312-180314</title>
+    <link href="http://www.songyuqiang.com/2018/03/14/180312-180314/"/>
+    <id>http://www.songyuqiang.com/2018/03/14/180312-180314/</id>
+    <published>2018-03-14T15:13:50.000Z</published>
+    <updated>2018-03-14T15:53:31.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="记录一下今天遇到的几个问题"><a href="#记录一下今天遇到的几个问题" class="headerlink" title="记录一下今天遇到的几个问题"></a>记录一下今天遇到的几个问题</h2><ul><li>JNI 调用so lib的native方法,提示JNI function cannot resolve<ul><li>然而编译后发现，项目运行正常，调研了一番后定位了是IDE的问题，Eclipse和AS都会出现，在开启了NDK support后，<br>APT只能定位到c,cpp代码中的方法，而并不能很好地定位so lib中的方法，导致IDE报红</li><li>解决方法，目前已知的就两个，要么无视这个编译期error，要么关掉ndk support</li></ul></li><li>在做仿微信的可以下拉返回的ImagePreviewer的时候, 下拉的事件和PhotoView的zoom事件冲突<ul><li>解决方法 //todo</li></ul></li><li><p>RecyclerView嵌套的页面,如果Recyclerview能够接收焦点，会在接收到焦点的时候，自动将屏幕滑动到顶部</p><ul><li>解决方法 设置不让RecyclerView接收焦点,这个操作并不会影响它的点击事件</li><li>与此同时，还必须让recyclerView的容器可以接收焦点<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">subRecyclerView.setNestedScrollingEnabled(false);</span><br><span class="line">subRecyclerViewParent.setFocusableInTouchMode(true);</span><br></pre></td></tr></table></figure></li></ul></li><li><p>RecyclerView嵌套的页面,滑动时失去fling效果</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subRecyclerView.setNestedScrollingEnabled(false);</span><br></pre></td></tr></table></figure></li><li><p>实际上，在项目中，应该避免RecycerView的嵌套，这会导致很多问题,例如焦点，高度固定，sub item无法复用等</p><ul><li>一个比较好的解决方法,是应该划分item type的粒度，使用同一个recyclerView，自定义LayoutManager来实现复杂类型的页面</li><li>这种方法的难点主要在于，增删元素计算position十分繁琐</li><li>为了解决这个问题，仔细学习了一下阿里v-layout的代码</li><li>//todo</li></ul></li><li><p>关于hashCode和equals的实现,</p><ul><li>EffectiveJava中主要提出了两方面的观点</li><li><p>基于里氏替换原则,一个可以被继承的基类的equals和hashCode方法，在子类中也应该是工作正常的</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (o == null || getClass() != o.getClass()) &#123;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>所以上面的代码，如果这个类不是一个final类，那么是不应该出现在equals方法中的，而应该用instanceOf 来代替getClass</p></li><li><p>第二,hashCode和equals应该有一致性，就像FP中函数不应该有副作用，hashCode和equals不应该依赖于一个不可控的变量</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return getId() != null ? getId().equals(object.getId()) : object.getId() == null;</span><br></pre></td></tr></table></figure></li><li><p>所以，上面的代码，如果getId的返回值不可控，那么就不应该出现在equals方法中</p></li><li>但是，有一个反例，在一些ORM框架，例如Hibernate，对象的equals和hashCode，在这个对象没有持久化前，是无法进行比较的</li><li>A business key does not have to be as solid as a database primary key candidate (see Section 13.1.3, “Considering object identity”). Immutable or unique properties are usually good candidates for a business key.</li><li>The most obvious way is to implementequals()/hashCode() by comparing the identifier value of both objects. If the value is the same, both must be the same database row, because they are equal. If both are added to a Set, you will only have one element in the Set). Unfortunately, you cannot use that approach with generated identifiers. Hibernate will only assign identifier values to objects that are persistent; a newly created instance will not have any identifier value. Furthermore, if an instance is unsaved and currently in aSet, saving it will assign an identifier value to the object. If equals() and hashCode() are based on the identifier value, the hash code would change, breaking the contract of the Set. See the Hibernate website for a full discussion of this problem. This is not a Hibernate issue, but normal Java semantics of object identity and equality.<br>It is recommended that you implementequals() and hashCode() using Business key equality. Business key equality means that the equals() method compares only the properties that form the business key. It is a key that would identify our instance in the real world (a natural candidate key):</li><li>我觉得，从工程的角度考虑，Hibernate这样设计是对的，但是适用范围有局限性</li><li>假如我们要在一些对象持久化前，放到一个容器，如ArrayList中，那么如果equals和hashCode不能工作，add,get,indexOf就会全部失效了</li></ul></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;记录一下今天遇到的几个问题&quot;&gt;&lt;a href=&quot;#记录一下今天遇到的几个问题&quot; class=&quot;headerlink&quot; title=&quot;记录一下今天遇到的几个问题&quot;&gt;&lt;/a&gt;记录一下今天遇到的几个问题&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;JNI 调用so lib的native方
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>2018-week-10</title>
+    <link href="http://www.songyuqiang.com/2018/03/11/lib/"/>
+    <id>http://www.songyuqiang.com/2018/03/11/lib/</id>
+    <published>2018-03-11T15:04:21.000Z</published>
+    <updated>2018-03-11T16:01:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="记录一下周末学习的碎片知识点，温故知新"><a href="#记录一下周末学习的碎片知识点，温故知新" class="headerlink" title="记录一下周末学习的碎片知识点，温故知新"></a>记录一下周末学习的碎片知识点，温故知新</h2><ul><li><a href="https://zhuanlan.zhihu.com/p/21359984" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/21359984</a><ul><li>为了减小 apk 体积，只保留 armeabi 和 armeabi-v7a 两个文件夹，并保证这两个文件夹中 .so 数量一致<br>对只提供 armeabi 版本的第三方 .so，原样复制一份到 armeabi-v7a 文件夹</li></ul></li><li><p>canvas双缓冲</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bufferBitmap = Bitmap.createBitmap(this.screenSize.x, this.screenSize.y, Bitmap.Config.ARGB_8888);//1</span><br><span class="line">        bufferCanvas = new Canvas(bufferBitmap);//2</span><br><span class="line">        canvas.drawBitmap(bufferBitmap, 0, 0, new Paint());//3</span><br></pre></td></tr></table></figure><ul><li>1 创建内存位图</li><li>2 创建绘图画布</li><li>3 在双缓冲中绘图，将自定义缓冲绘制到屏幕上</li><li><p>经过测试，绘制操作较少的时候，不使用缓冲效率较高，反之，canvas双缓冲可以大幅提高渲染速度</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private void drawOnBuffer(Canvas canvas) &#123;</span><br><span class="line">        Paint paint = new Paint();</span><br><span class="line">        paint.setAntiAlias(true);</span><br><span class="line">        canvas.drawColor(Color.WHITE);</span><br><span class="line">        for (int n = 0; n &lt; 500; n++) &#123;                     </span><br><span class="line">            //随机在绘图画布上绘制500个圆</span><br><span class="line">            int r = rand.nextInt(256);</span><br><span class="line">            int g = rand.nextInt(256);</span><br><span class="line">            int b = rand.nextInt(256);</span><br><span class="line">            paint.setColor(Color.rgb(r, g, b));</span><br><span class="line">            int x = rand.nextInt(canvas.getWidth());</span><br><span class="line">            int y = rand.nextInt(canvas.getHeight());</span><br><span class="line">            int radius = rand.nextInt(100) + 20;</span><br><span class="line">            canvas.drawCircle(x, y, radius, paint);</span><br><span class="line">            Log.d(&quot;Circle&quot;, &quot;第n个&quot; + n);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li><li><p>在上面这个例子中，临界点大概在一次绘制500个圆</p></li></ul></li><li><p>最近被问了很多次保活，为了加深认识，做了这几个方面的调研</p><ul><li>问了一个在这方面做的比较多的朋友，现在还没堵上的大概有这么几个<ul><li>针对不同api version，做不同的适配</li><li>JobService</li><li>相同id Service</li><li>daemon</li><li>接一些应用市场，如google play的receiver</li></ul></li><li>decompile了几个国内比较大的应用，找到了一些相关代码片段<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">if (VERSION.SDK_INT &gt;= 21) &#123;</span><br><span class="line">    ((JobScheduler) a.a.getSystemService(&quot;jobscheduler).cancel(2);&#125; </span><br><span class="line">else &#123;</span><br><span class="line">    AlarmManager alarmManager = (AlarmManager) a.a.getSystemService(NotificationCompatApi24.CATEGORY_ALARM);</span><br><span class="line">    if (b != null) &#123;</span><br><span class="line">                alarmManager.cancel(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public void onReceive(Context context, Intent intent) &#123;</span><br><span class="line">    if (intent != null &amp;&amp; &quot;com.xxx.packagename&quot;.equals(intent.getAction())) &#123;</span><br><span class="line">        WatchDogService.a();</span><br><span class="line">    &#125; else if (a.c) &#123;</span><br><span class="line">        a.a(a.b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul></li><li><p>关于保证客户端私钥安全，首先，这是一个伪命题，私钥存在客户端，无论如何都不安全</p><ul><li>一个稍微靠谱的方式，将私钥写在native lib里，通过jni调用获取<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">static &#123;</span><br><span class="line">    System.loadLibrary(&quot;private_config&quot;);</span><br><span class="line">    native_init();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static String a(String str, JSONObject jSONObject) &#123;</span><br><span class="line">    return a(str, jSONObject.toString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static String a(String str, String str2) &#123;</span><br><span class="line">    String generateSign = generateSign(str2.getBytes());</span><br><span class="line">    if (str.contains(&quot;?&quot;)) &#123;</span><br><span class="line">        generateSign = &quot;&amp;sign=&quot; + generateSign;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        generateSign = &quot;?sign=&quot; + generateSign;</span><br><span class="line">    &#125;</span><br><span class="line">    return str + generateSign;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;记录一下周末学习的碎片知识点，温故知新&quot;&gt;&lt;a href=&quot;#记录一下周末学习的碎片知识点，温故知新&quot; class=&quot;headerlink&quot; title=&quot;记录一下周末学习的碎片知识点，温故知新&quot;&gt;&lt;/a&gt;记录一下周末学习的碎片知识点，温故知新&lt;/h2&gt;&lt;ul&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>multipart</title>
+    <link href="http://www.songyuqiang.com/2018/02/25/multipart/"/>
+    <id>http://www.songyuqiang.com/2018/02/25/multipart/</id>
+    <published>2018-02-24T17:02:43.000Z</published>
+    <updated>2018-02-28T14:03:58.000Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>相比于Python,Ruby,使用Go编写的脚本直接生成可执行的二进制文件,可以直接在os上运行</li><li>于是尝试用Go写了一个 Android apk 打包上传fir.im的脚本,这样在团队中使用,可以不需要配脚本的编译运行环境,即插即用</li><li>首先,运行二进制的 gradlew 打包一个 apk</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(&quot;./gradlew&quot;,&quot;assembleDebug&quot;)</span><br><span class="line">cmd.Stdout = os.Stdout</span><br><span class="line">cmd.Stderr = os.Stderr</span><br><span class="line">if err := cmd.Run(); err != nil &#123;</span><br><span class="line">log.Fatalf(&quot;Error building Android app: %v&quot;,err)</span><br><span class="line">return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>第二步,用 fir.im 的第三方服务发起一个HTTP GET request,生成七牛的token</li><li><p>在解析返回的json时遇到了一些阻碍<br>一开始没有找到类似 Java  中JsonObject optString的方法,使用Go,每解析一层都需要转成一个字典,导致代码十分繁琐</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var model map[string]string</span><br><span class="line">err = json.Unmarshal([]byte(*str), &amp;model)</span><br></pre></td></tr></table></figure></li><li><p>于是采用了第二种方法,先根据json生成一个model,之后将返回的string映射到这个model上,这种方法明显方便了很多</p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">config := make(map[string]interface&#123;&#125;)</span><br><span class="line">config[&quot;type&quot;] = &quot;android&quot;</span><br><span class="line">config[&quot;bundle_id&quot;] = &quot;xxx&quot;</span><br><span class="line">config[&quot;api_token&quot;] = &quot;yyy&quot;</span><br><span class="line">bytesData, err := json.Marshal(config)</span><br><span class="line">reader := bytes.NewReader(bytesData)</span><br><span class="line">resp, err := http.Post(&quot;http://api.fir.im/apps&quot;,&quot;application/json&quot;, reader)</span><br></pre></td></tr></table></figure><ul><li>最后一步,使用form/data上传文件</li><li>这里学到一个知识,multipart表单上传多个 field 时,是将所有内容作为一个字符串写入到body中,结合 http/boundary 来分割不同part的内容</li><li>也就是说,正确的做法,应该是要先遍历所有 field 中的内容,生成出与这些内容没有发生交集的字符串,来作为分隔符</li><li><p>而不能简单的用如\r\n这样的方式来分隔,因为要上传的field中可能就包含了\r\n，导致分割的part不是我们想要的</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//go 标准库中生成boundary的方法</span><br><span class="line">    func randomBoundary() string &#123;</span><br><span class="line">var buf [30]byte</span><br><span class="line">_, err := io.ReadFull(rand.Reader, buf[:])</span><br><span class="line">if err != nil &#123;</span><br><span class="line">panic(err)</span><br><span class="line">&#125;</span><br><span class="line">return fmt.Sprintf(&quot;%x&quot;, buf[:])</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li><li><p>TODO : gradle 整合 go 二进制脚本 </p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;相比于Python,Ruby,使用Go编写的脚本直接生成可执行的二进制文件,可以直接在os上运行&lt;/li&gt;
+&lt;li&gt;于是尝试用Go写了一个 Android apk 打包上传fir.im的脚本,这样在团队中使用,可以不需要配脚本的编译运行环境,即插即用&lt;/li&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="golang" scheme="http://www.songyuqiang.com/tags/golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>objective</title>
+    <link href="http://www.songyuqiang.com/2018/02/20/objective/"/>
+    <id>http://www.songyuqiang.com/2018/02/20/objective/</id>
+    <published>2018-02-20T13:28:43.000Z</published>
+    <updated>2018-02-28T14:03:12.000Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>后天又要上班了…</li><li>VSC真好用</li><li>果然定了很多计划最后啥都没干</li><li>leetcode078 subsets 怎么做都不会…</li><li>新的一年我只有一个目标 ==&gt; 早起</li><li>持续集成真好用…</li><li>还是需要一个好的显示器…</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;后天又要上班了…&lt;/li&gt;
+&lt;li&gt;VSC真好用&lt;/li&gt;
+&lt;li&gt;果然定了很多计划最后啥都没干&lt;/li&gt;
+&lt;li&gt;leetcode078 subsets 怎么做都不会…&lt;/li&gt;
+&lt;li&gt;新的一年我只有一个目标 ==&amp;gt; 早起&lt;/li&gt;
+&lt;li&gt;持续集成真
+      
+    
+    </summary>
+    
+    
+      <category term="trush" scheme="http://www.songyuqiang.com/tags/trush/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode050</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode050/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode050/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">fmt.Printf(&quot;%v&quot;, myPow(2, -2))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func myPow(x float64, n int) float64 &#123;</span><br><span class="line">if n == 0 &#123;</span><br><span class="line">return 1.0</span><br><span class="line">&#125;</span><br><span class="line">half := myPow(x, n/2)</span><br><span class="line"></span><br><span class="line">if n%2 == 0 &#123;</span><br><span class="line">return half * half</span><br><span class="line">&#125; else if n &gt; 0 &#123;</span><br><span class="line">return half * half * x</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return half / x * half</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode008</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode008/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode008/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func myAtoi(str string) int &#123;</span><br><span class="line">if str == &quot;&quot; &#123;</span><br><span class="line">return 0</span><br><span class="line">&#125;</span><br><span class="line">bytes := []byte(str)</span><br><span class="line">var res int64 = 0</span><br><span class="line">carry := 1</span><br><span class="line"></span><br><span class="line">positive := true</span><br><span class="line">start := true</span><br><span class="line">startindex := 0</span><br><span class="line">for i, v := range bytes &#123;</span><br><span class="line">if !start &amp;&amp; v == 32 &#123;</span><br><span class="line">return 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if start &#123;</span><br><span class="line">if v==32 &#123;</span><br><span class="line">continue</span><br><span class="line">&#125;</span><br><span class="line">if v == &apos;-&apos; &#123;</span><br><span class="line">positive = false</span><br><span class="line">&#125; else if v &gt; 48 &amp;&amp; v &lt;= 57 &#123;</span><br><span class="line">startindex = i</span><br><span class="line">break</span><br><span class="line">&#125;else if v!=&apos;+&apos;&amp;&amp;v&lt;48||v&gt;57&#123;</span><br><span class="line">return 0</span><br><span class="line">&#125;</span><br><span class="line">start = false</span><br><span class="line">&#125; else if !start &#123;</span><br><span class="line">fmt.Printf(&quot;begin %v&quot;, v)</span><br><span class="line">if v == 48 &#123;</span><br><span class="line"></span><br><span class="line">continue</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if v &gt; 48 &amp;&amp; v &lt;= 57 &#123;</span><br><span class="line">if i+1 &lt; len(bytes) &amp;&amp; bytes[i+1] == 32 &#123;</span><br><span class="line">return 0</span><br><span class="line">&#125; else &#123;</span><br><span class="line">startindex = i</span><br><span class="line">break</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125; else &#123;</span><br><span class="line">return 0</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">//fmt.Printf(&quot;start %v %v \n&quot;,startindex,bytes[startindex+1])</span><br><span class="line">for i := len(bytes) - 1; i &gt;= startindex; i-- &#123;</span><br><span class="line"></span><br><span class="line">v := bytes[i]</span><br><span class="line"></span><br><span class="line">if v &gt;= 48 &amp;&amp; v &lt;= 57 &#123;</span><br><span class="line">var num int</span><br><span class="line">if positive &#123;</span><br><span class="line">num = int(v - 48)</span><br><span class="line">&#125; else &#123;</span><br><span class="line">num = -(int(v - 48))</span><br><span class="line">&#125;</span><br><span class="line">res += int64(num * carry)</span><br><span class="line"></span><br><span class="line">if res &gt; 2147483647 &#123;</span><br><span class="line">return 2147483647</span><br><span class="line">&#125;</span><br><span class="line">if res &lt; -2147483648 &#123;</span><br><span class="line">return -2147483648</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">carry *= 10</span><br><span class="line"></span><br><span class="line">&#125; else if v == 32 &#123;</span><br><span class="line">res = 0</span><br><span class="line"></span><br><span class="line">carry = 1</span><br><span class="line">&#125; else &#123;</span><br><span class="line">res = 0</span><br><span class="line"></span><br><span class="line">carry = 1</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">return int(res)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line"></span><br><span class="line">print(myAtoi(&quot;9223372036854775809&quot;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode009</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode009/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode009/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">func isPalindrome(x int) bool &#123;</span><br><span class="line">//carry := 1</span><br><span class="line">//var arr []int</span><br><span class="line">if x &lt; 0 &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">lens := 1</span><br><span class="line">for x/(lens*10) != 0 &#123;</span><br><span class="line">lens *= 10</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">left := 1</span><br><span class="line">right := lens</span><br><span class="line">for left &lt; right &#123;</span><br><span class="line">//fmt.Printf(&quot;%v %v \n&quot;, (x / left), (x / lens))</span><br><span class="line">if x/left%10 != x/right%10 &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">left *= 10</span><br><span class="line">right /= 10</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">/*for x/carry != 0 &#123;</span><br><span class="line">arr = append(arr, x/carry%10)</span><br><span class="line"></span><br><span class="line">carry *= 10</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">i := 0</span><br><span class="line">j := len(arr) - 1</span><br><span class="line"></span><br><span class="line">for i &lt; len(arr)-1 &amp;&amp; j &gt;= 0 &#123;</span><br><span class="line">//fmt.Printf(&quot;%v  %v \n&quot;, arr[i], arr[j])</span><br><span class="line">if arr[i] != arr[j] &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">i++</span><br><span class="line">j--</span><br><span class="line">&#125;*/</span><br><span class="line"></span><br><span class="line">return true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode011</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode011/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode011/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">println(maxArea([]int&#123;1,1&#125;))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func maxArea(height []int) int &#123;</span><br><span class="line">var startIndex = 0</span><br><span class="line">var endIndex = len(height) - 1</span><br><span class="line">startHeight := height[0]</span><br><span class="line">endHeight := height[len(height)-1]</span><br><span class="line">var res = 0</span><br><span class="line">if startHeight &gt; endHeight &#123;</span><br><span class="line">res = endHeight * (len(height)-1)</span><br><span class="line">endIndex--</span><br><span class="line">&#125; else &#123;</span><br><span class="line">res = startHeight * (len(height)-1)</span><br><span class="line">startIndex++</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fmt.Println(res)</span><br><span class="line"></span><br><span class="line">for startIndex &lt; endIndex &#123;</span><br><span class="line">startHeight := height[startIndex]</span><br><span class="line">endHeight := height[endIndex]</span><br><span class="line">var temp = 0</span><br><span class="line">if startHeight &gt; endHeight &#123;</span><br><span class="line">temp = endHeight * (endIndex - startIndex)</span><br><span class="line">fmt.Println(temp, &quot;   &quot;, endHeight, &quot;   &quot;, endIndex, &quot;   &quot;, startIndex)</span><br><span class="line"></span><br><span class="line">&#125; else &#123;</span><br><span class="line">temp = startHeight * (endIndex - startIndex)</span><br><span class="line">fmt.Println(temp, &quot;   &quot;, startHeight, &quot;   &quot;, endIndex, &quot;   &quot;, startIndex)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if temp &gt; res &#123;</span><br><span class="line">res = temp</span><br><span class="line">&#125;</span><br><span class="line">if startHeight &lt; endHeight &#123;</span><br><span class="line">startIndex++</span><br><span class="line">&#125; else &#123;</span><br><span class="line">endIndex--</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">return res</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode013</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode013/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode013/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">fmt.Printf(&quot;%v&quot;, romanToInt(&quot;MDCCCLXXXIV&quot;))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">相同的数字连写，所表示的数等于这些数字相加得到的数，例如：III = 3</span><br><span class="line">小的数字在大的数字右边，所表示的数等于这些数字相加得到的数，例如：VIII = 8</span><br><span class="line">小的数字，限于（I、X和C）在大的数字左边，所表示的数等于大数减去小数所得的数，例如：IV = 4</span><br><span class="line">正常使用时，连续的数字重复不得超过三次</span><br><span class="line">从前向后遍历罗马数字，如果某个数比前一个数小，则加上该数。反之，减去前一个数的两倍然后加上该数</span><br><span class="line">*/</span><br><span class="line">func romanToInt(s string) int &#123;</span><br><span class="line">var dic = make(map[rune]int)</span><br><span class="line">dic[&apos;I&apos;] = 1</span><br><span class="line">dic[&apos;V&apos;] = 5</span><br><span class="line">dic[&apos;X&apos;] = 10</span><br><span class="line">dic[&apos;L&apos;] = 50</span><br><span class="line">dic[&apos;C&apos;] = 100</span><br><span class="line">dic[&apos;D&apos;] = 500</span><br><span class="line">dic[&apos;M&apos;] = 1000</span><br><span class="line"></span><br><span class="line">arr := []rune(s)</span><br><span class="line">var result = dic[arr[0]]</span><br><span class="line">for i := 1; i &lt; len(arr); i++ &#123;</span><br><span class="line">cur := dic[arr[i]]</span><br><span class="line">previous := dic[arr[i-1]]</span><br><span class="line">if cur &lt;= previous &#123;</span><br><span class="line">result += cur</span><br><span class="line">&#125; else &#123;</span><br><span class="line">result -= previous &lt;&lt; 1</span><br><span class="line">result += cur</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">return result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode014</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode014/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode014/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">给定一个String类型数组，要求写一个方法，返回数组中这些字符串的最长公共前缀。</span><br><span class="line">举个例子：假如数组为[&quot;123&quot;,&quot;12&quot;,&quot;4&quot;]，经过这个方法返回的结果就应该是&quot;&quot;。</span><br><span class="line">因为&quot;123&quot;，&quot;12&quot;，&quot;4&quot;并没有共同的前缀，虽然&quot;123&quot;，&quot;12&quot;的公共最长前缀是&quot;12&quot;，</span><br><span class="line">但是这个公共前缀&quot;12&quot;与&quot;4&quot;没有公共前缀，所以最后返回的结果就是&quot;&quot;。</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">var strs = []string&#123;&quot;c&quot;,&quot;c&quot;&#125;</span><br><span class="line">fmt.Printf(&quot;%s&quot;, longestCommonPrefix(strs))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func longestCommonPrefix(strs []string) string &#123;</span><br><span class="line">if len(strs) == 0 || strs[0] == &quot;&quot; &#123;</span><br><span class="line">return &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if len(strs)==1 &#123;</span><br><span class="line">return strs[0]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">str := strs[0]</span><br><span class="line">index := 0</span><br><span class="line">var res []byte</span><br><span class="line">Label:</span><br><span class="line">for &#123;</span><br><span class="line">if index &lt; len(str) &#123;</span><br><span class="line">simple := str[index]</span><br><span class="line">for i := 1; i &lt; len(strs); i++ &#123;</span><br><span class="line">if index &lt; len(strs[i]) &#123;</span><br><span class="line">char := strs[i][index]</span><br><span class="line">if char != simple &#123;</span><br><span class="line">break Label</span><br><span class="line">&#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line"></span><br><span class="line">break Label</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">res = append(res, simple)</span><br><span class="line"></span><br><span class="line">&#125;else&#123;</span><br><span class="line">break</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">index++</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">return string(res)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode015</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode015/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode015/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">&quot;fmt&quot;</span><br><span class="line">&quot;sort&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">/*Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.</span><br><span class="line"></span><br><span class="line">Note: The solution set must not contain duplicate triplets.</span><br><span class="line"></span><br><span class="line">For example, given array S = [-1, 0, 1, 2, -1, -4],</span><br><span class="line"></span><br><span class="line">A solution set is:</span><br><span class="line">[</span><br><span class="line">  [-1, 0, 1],</span><br><span class="line">  [-1, -1, 2]</span><br><span class="line">]*/</span><br><span class="line"></span><br><span class="line">func threeSum(nums []int) [][]int &#123;</span><br><span class="line"></span><br><span class="line">sort.Ints(nums)</span><br><span class="line">var data map[int][]int</span><br><span class="line">data = make(map[int][]int)</span><br><span class="line">var result [][]int</span><br><span class="line"></span><br><span class="line">//var result [][]int</span><br><span class="line">for i := 0; i &lt; len(nums); i++ &#123;</span><br><span class="line"></span><br><span class="line">_, ok := data[nums[i]]</span><br><span class="line">if ok &#123;</span><br><span class="line">fmt.Printf(&quot;%v contains \n&quot;, nums[i])</span><br><span class="line">continue</span><br><span class="line">&#125; else &#123;</span><br><span class="line"></span><br><span class="line">target := -nums[i]</span><br><span class="line">//fmt.Printf(&quot;target %v \n&quot;, target)</span><br><span class="line">subn := nums[i+1:]</span><br><span class="line">m := make(map[int]int, len(subn))</span><br><span class="line"></span><br><span class="line">for subi := 0; subi &lt; len(subn); subi++ &#123;</span><br><span class="line"></span><br><span class="line">v, has := m[target-subn[subi]]</span><br><span class="line">if has &#123;</span><br><span class="line"></span><br><span class="line">v1, has1 := data[nums[i]]</span><br><span class="line">if has1 &#123;</span><br><span class="line">if v1[0] != subn[v] &amp;&amp; v1[0] != subn[subi] &#123;</span><br><span class="line">result = append(result, []int&#123;nums[i], subn[v], subn[subi]&#125;)</span><br><span class="line">data[nums[i]] = []int&#123;subn[v], subn[subi]&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">result = append(result, []int&#123;nums[i], subn[v], subn[subi]&#125;)</span><br><span class="line">data[nums[i]] = []int&#123;subn[v], subn[subi]&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/*result = append(result, []int&#123;nums[i], subn[v], subn[subi]&#125;)</span><br><span class="line">data[nums[i]] = []int&#123;subn[v], subn[subi]&#125;</span><br><span class="line">*/</span><br><span class="line">&#125;</span><br><span class="line">m[subn[subi]] = subi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//fmt.Printf(&quot;%v&quot;, result)</span><br><span class="line">return result</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func twoSum(nums []int, target int) []int &#123;</span><br><span class="line"></span><br><span class="line">m := make(map[int]int, len(nums))</span><br><span class="line"></span><br><span class="line">for i, num := range nums &#123;</span><br><span class="line">v, has := m[target-nums[i]]</span><br><span class="line">if has &#123;</span><br><span class="line">var result []int = []int&#123;v, i&#125;</span><br><span class="line">return result</span><br><span class="line">&#125;</span><br><span class="line">m[num] = i</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">return nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode020</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode020/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode020/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">/*Given a string containing just the characters &apos;(&apos;, &apos;)&apos;, &apos;&#123;&apos;, &apos;&#125;&apos;, &apos;[&apos; and &apos;]&apos;,</span><br><span class="line">determine if the input string is valid.</span><br><span class="line"></span><br><span class="line">The brackets must close in the correct order,</span><br><span class="line">&quot;()&quot; and &quot;()[]&#123;&#125;&quot; are all valid but &quot;(]&quot; and &quot;([)]&quot; are not.*/</span><br><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">&quot;container/list&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">print(isValid(&quot;[()]&quot;))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func isValid(s string) bool &#123;</span><br><span class="line">operatorStack := list.New()</span><br><span class="line">for _, v := range s &#123;</span><br><span class="line">if v == &apos;(&apos; || v == &apos;&#123;&apos; || v == &apos;[&apos; &#123;</span><br><span class="line">operatorStack.PushFront(v)</span><br><span class="line">&#125; else if v == &apos;)&apos; &#123;</span><br><span class="line">front := operatorStack.Front()</span><br><span class="line">if front != nil &#123;</span><br><span class="line">if front.Value.(int32) == &apos;(&apos; &#123;</span><br><span class="line">operatorStack.Remove(operatorStack.Front())</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">&#125; else if v == &apos;]&apos; &#123;</span><br><span class="line">front := operatorStack.Front()</span><br><span class="line">if front != nil &#123;</span><br><span class="line">if front.Value.(int32) == &apos;[&apos; &#123;</span><br><span class="line">operatorStack.Remove(operatorStack.Front())</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">&#125; else if v == &apos;&#125;&apos; &#123;</span><br><span class="line">front := operatorStack.Front()</span><br><span class="line">if front != nil &#123;</span><br><span class="line">if front.Value.(int32) == &apos;&#123;&apos; &#123;</span><br><span class="line">operatorStack.Remove(operatorStack.Front())</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">if operatorStack.Front() != nil &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">return true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode026</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode026/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode026/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func removeDuplicates(nums []int) int &#123;</span><br><span class="line">index := 1</span><br><span class="line">for i := 1; i &lt; len(nums); i++ &#123;</span><br><span class="line">if nums[index] != nums[i-1] &#123;</span><br><span class="line">nums[index] = nums[i]</span><br><span class="line">index++</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(&quot;%v&quot;, nums)</span><br><span class="line">return index</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode027</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode027/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode027/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">//3,2,2,3</span><br><span class="line">//2,2,3,3</span><br><span class="line">func removeElement(nums []int, val int) int &#123;</span><br><span class="line">//index := 1</span><br><span class="line">lastindex := 0</span><br><span class="line">for i := 0; i &lt; len(nums); i++ &#123;</span><br><span class="line">if nums[i] != val &#123;</span><br><span class="line">nums[lastindex] = nums[i]</span><br><span class="line">lastindex++</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">return lastindex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode021</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode021/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode021/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * type ListNode struct &#123;</span><br><span class="line"> *     Val int</span><br><span class="line"> *     Next *ListNode</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span><br><span class="line">func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode &#123;</span><br><span class="line">var res = &amp;ListNode&#123;-1, nil&#125;</span><br><span class="line">var dummy = res</span><br><span class="line">for l1 != nil &amp;&amp; l2 != nil &#123;</span><br><span class="line">l1Value := l1.Val</span><br><span class="line">l2Value := l2.Val</span><br><span class="line">if l1Value &lt; l2Value &#123;</span><br><span class="line">dummy.Next = l1</span><br><span class="line">l1 = l1.Next</span><br><span class="line">&#125; else &#123;</span><br><span class="line">dummy.Next = l2</span><br><span class="line">l2 = l2.Next</span><br><span class="line">&#125;</span><br><span class="line">dummy = dummy.Next</span><br><span class="line">&#125;</span><br><span class="line">if l1 != nil &#123;</span><br><span class="line">dummy.Next = l1</span><br><span class="line">&#125; else &#123;</span><br><span class="line">dummy.Next = l2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">return res.Next</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode035</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode035/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode035/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">func SearchInsert(nums []int, target int) int &#123;</span><br><span class="line">if len(nums) == 1 &#123;</span><br><span class="line">if target &gt; nums[0] &#123;</span><br><span class="line">return 1</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return 0</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for i := 1; i &lt; len(nums); i++ &#123;</span><br><span class="line">if target == nums[i] &#123;</span><br><span class="line">return i</span><br><span class="line">&#125; else if target &lt; nums[i] &#123;</span><br><span class="line">if target &gt; nums[i-1] &#123;</span><br><span class="line">return i</span><br><span class="line">&#125; else &#123;</span><br><span class="line">return i - 1</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">return len(nums)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode001</title>
+    <link href="http://www.songyuqiang.com/2018/01/18/leetcode001/"/>
+    <id>http://www.songyuqiang.com/2018/01/18/leetcode001/</id>
+    <published>2018-01-18T05:38:08.000Z</published>
+    <updated>2018-01-18T05:38:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">func twoSum(nums []int, target int) []int &#123;</span><br><span class="line"></span><br><span class="line">m := make(map[int]int, len(nums))</span><br><span class="line"></span><br><span class="line">for i, num := range nums &#123;</span><br><span class="line">v, has := m[target-nums[i]]</span><br><span class="line">if has &#123;</span><br><span class="line">var result []int = []int&#123;v, i&#125;</span><br><span class="line">return result</span><br><span class="line">&#125;</span><br><span class="line">m[num] = i</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">return nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://www.songyuqiang.com/tags/leetcode/"/>
+    
+  </entry>
+  
+</feed>

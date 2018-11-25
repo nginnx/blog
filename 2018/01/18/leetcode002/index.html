@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>leetcode002 | 西二旗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta name="keywords" content="leetcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode002">
+<meta property="og:url" content="http://www.songyuqiang.com/2018/01/18/leetcode002/index.html">
+<meta property="og:site_name" content="西二旗">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-18T05:38:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="leetcode002">
+<meta name="twitter:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">西二旗</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://www.songyuqiang.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode002" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/18/leetcode002/" class="article-date">
+  <time datetime="2018-01-18T05:38:08.000Z" itemprop="datePublished">2018-01-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      leetcode002
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	var head = &amp;ListNode&#123;9, nil&#125;</span><br><span class="line">	generate(head, 1)</span><br><span class="line">	generate(head, 6)</span><br><span class="line">	//generate(head, 9)</span><br><span class="line">	var head1 = &amp;ListNode&#123;0, nil&#125;</span><br><span class="line">	//generate(head1, 3)</span><br><span class="line">	//generate(head1, 8)</span><br><span class="line">	//generate(head1, 1)</span><br><span class="line"></span><br><span class="line">	//printLink(head)</span><br><span class="line">	println()</span><br><span class="line">	//printLink(head1)</span><br><span class="line">	println()</span><br><span class="line">	numbers := addTwoNumbers(head, head1)</span><br><span class="line">	printLink(numbers)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode &#123;</span><br><span class="line">	var carry = 0</span><br><span class="line">	var head = ListNode&#123;-1, nil&#125;</span><br><span class="line">	var res = &amp;head</span><br><span class="line">	for l1 != nil &amp;&amp; l2 != nil &#123;</span><br><span class="line">		temp := l1.Val + l2.Val + carry</span><br><span class="line">		if temp &gt; 9 &#123;</span><br><span class="line">			if res.Val == -1 &#123;</span><br><span class="line">				res.Val = temp - 10</span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				res.Next = &amp;ListNode&#123;temp - 10, nil&#125;</span><br><span class="line">				res = res.Next</span><br><span class="line">			&#125;</span><br><span class="line">			if carry==0&#123;</span><br><span class="line">				carry++</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			if res.Val == -1 &#123;</span><br><span class="line">				res.Val = temp</span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				res.Next = &amp;ListNode&#123;temp, nil&#125;</span><br><span class="line">				res = res.Next</span><br><span class="line">				if carry &gt; 0 &#123;</span><br><span class="line">					carry--</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		fmt.Printf(&quot;\n %v %v %v %v&quot;, l1.Val, l2.Val, res.Val, temp)</span><br><span class="line">		if res.Next != nil &#123;</span><br><span class="line">			fmt.Printf(&quot;\n next %v&quot;, res.Next.Val)</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		l1 = l1.Next</span><br><span class="line">		l2 = l2.Next</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	for l1 != nil &#123;</span><br><span class="line">		temp := l1.Val + carry</span><br><span class="line">		fmt.Printf(&quot;\n carry %v&quot;,carry)</span><br><span class="line">		if temp &gt; 9 &#123;</span><br><span class="line">			res.Next = &amp;ListNode&#123;temp - 10, nil&#125;</span><br><span class="line">			res = res.Next</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			res.Next = &amp;ListNode&#123;temp, nil&#125;</span><br><span class="line">			res = res.Next</span><br><span class="line">			if carry&gt;0 &#123;</span><br><span class="line">				carry--</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		l1 = l1.Next</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	for l2 != nil &#123;</span><br><span class="line">		temp := l2.Val + carry</span><br><span class="line">		if temp &gt; 9 &#123;</span><br><span class="line">			res.Next = &amp;ListNode&#123;temp - 10, nil&#125;</span><br><span class="line">			res = res.Next</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			res.Next = &amp;ListNode&#123;temp, nil&#125;</span><br><span class="line">			res = res.Next</span><br><span class="line">			if carry&gt;0 &#123;</span><br><span class="line">				carry--</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		l2 = l2.Next</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	for carry &gt; 0 &#123;</span><br><span class="line">		res.Next = &amp;ListNode&#123;1, nil&#125;</span><br><span class="line">		res = res.Next</span><br><span class="line">		carry--</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return &amp;head</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func generate(head *ListNode, val int) &#123;</span><br><span class="line">	temp := head</span><br><span class="line">	for temp.Next != nil &#123;</span><br><span class="line">		temp = temp.Next</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	temp.Next = &amp;ListNode&#123;val, nil&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func printLink(head *ListNode) &#123;</span><br><span class="line">	temp := head</span><br><span class="line">	for temp != nil &#123;</span><br><span class="line">		print(temp.Val)</span><br><span class="line">		temp = temp.Next</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type ListNode struct &#123;</span><br><span class="line">	Val  int</span><br><span class="line">	Next *ListNode</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.songyuqiang.com/2018/01/18/leetcode002/" data-id="cjlkxq36a0004jgabf0r8z7ix" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/18/leetcode371/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          leetcode371
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/18/leetcode004/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode004</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/trush/">trush</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/06/handle_leak/">句柄泄漏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/proxy/">proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/25/leetcode443/">leetcode443</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/14/180312-180314/">180312-180314</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/11/lib/">2018-week-10</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 nameless<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
